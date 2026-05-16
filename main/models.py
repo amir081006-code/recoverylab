@@ -63,3 +63,43 @@ class Workout(models.Model):
     class Meta:
         verbose_name = 'Тренировка'
         verbose_name_plural = 'Тренировки'
+
+class WorkoutSet(models.Model):
+    workout = models.ForeignKey(
+        Workout,
+        on_delete=models.CASCADE,
+        verbose_name='Тренировка'
+    )
+
+    exercise = models.ForeignKey(
+        Exercise,
+        on_delete=models.CASCADE,
+        verbose_name='Упражнение'
+    )
+
+    sets = models.PositiveIntegerField(
+        verbose_name='Количество подходов'
+    )
+
+    reps = models.PositiveIntegerField(
+        verbose_name='Повторения'
+    )
+
+    weight = models.FloatField(
+        verbose_name='Вес (кг)'
+    )
+
+    rpe = models.IntegerField(
+        verbose_name='RPE'
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    def __str__(self):
+        return f'{self.exercise} - {self.weight} кг'
+
+    class Meta:
+        verbose_name = 'Подход упражнения'
+        verbose_name_plural = 'Подходы упражнений'
