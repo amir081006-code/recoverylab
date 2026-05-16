@@ -103,3 +103,42 @@ class WorkoutSet(models.Model):
     class Meta:
         verbose_name = 'Подход упражнения'
         verbose_name_plural = 'Подходы упражнений'
+
+class RecoveryMetric(models.Model):
+    workout = models.ForeignKey(
+        Workout,
+        on_delete=models.CASCADE,
+        verbose_name='Тренировка'
+    )
+
+    sleep_hours = models.FloatField(
+        verbose_name='Часы сна'
+    )
+
+    stress_level = models.IntegerField(
+        verbose_name='Уровень стресса'
+    )
+
+    energy_level = models.IntegerField(
+        verbose_name='Уровень энергии'
+    )
+
+    mood = models.CharField(
+        max_length=100,
+        verbose_name='Самочувствие'
+    )
+
+    recovery_score = models.FloatField(
+        verbose_name='Recovery Score'
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    def __str__(self):
+        return f'Recovery for {self.workout}'
+
+    class Meta:
+        verbose_name = 'Показатель восстановления'
+        verbose_name_plural = 'Показатели восстановления'

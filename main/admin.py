@@ -1,5 +1,10 @@
 from django.contrib import admin
-from .models import Exercise, Workout, WorkoutSet
+from .models import (
+    Exercise,
+    Workout,
+    WorkoutSet,
+    RecoveryMetric
+)
 
 
 @admin.register(Exercise)
@@ -27,5 +32,20 @@ class WorkoutSetAdmin(admin.ModelAdmin):
 
     search_fields = (
         'exercise__name',
+        'workout__title',
+    )
+
+@admin.register(RecoveryMetric)
+class RecoveryMetricAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'workout',
+        'sleep_hours',
+        'stress_level',
+        'energy_level',
+        'recovery_score'
+    )
+
+    search_fields = (
         'workout__title',
     )
