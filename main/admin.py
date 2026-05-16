@@ -3,7 +3,8 @@ from .models import (
     Exercise,
     Workout,
     WorkoutSet,
-    RecoveryMetric
+    RecoveryMetric,
+    BodyMeasurement
 )
 
 
@@ -48,4 +49,18 @@ class RecoveryMetricAdmin(admin.ModelAdmin):
 
     search_fields = (
         'workout__title',
+    )
+
+@admin.register(BodyMeasurement)
+class BodyMeasurementAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'weight',
+        'body_fat',
+        'muscle_mass',
+        'measurement_date'
+    )
+
+    search_fields = (
+        'measurement_date',
     )

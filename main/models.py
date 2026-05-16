@@ -142,3 +142,31 @@ class RecoveryMetric(models.Model):
     class Meta:
         verbose_name = 'Показатель восстановления'
         verbose_name_plural = 'Показатели восстановления'
+
+class BodyMeasurement(models.Model):
+    weight = models.FloatField(
+        verbose_name='Вес (кг)'
+    )
+
+    body_fat = models.FloatField(
+        verbose_name='Процент жира'
+    )
+
+    muscle_mass = models.FloatField(
+        verbose_name='Мышечная масса'
+    )
+
+    measurement_date = models.DateField(
+        verbose_name='Дата измерения'
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    def __str__(self):
+        return f'{self.weight} кг'
+
+    class Meta:
+        verbose_name = 'Измерение тела'
+        verbose_name_plural = 'Измерения тела'
