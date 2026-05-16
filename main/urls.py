@@ -3,7 +3,8 @@ from .views import (
     home,
     create_workout,
     workout_list,
-    workout_detail
+    workout_detail,
+    body_stats
 )
 
 urlpatterns = [
@@ -15,5 +16,11 @@ urlpatterns = [
         'workout/<int:workout_id>/',
         workout_detail,
         name='workout_detail'
+    ),
+
+    path(
+        'body-stats/',
+        body_stats,
+        name='body_stats'
     ),
 ]

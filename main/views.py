@@ -1,5 +1,12 @@
 from django.shortcuts import render
-
+import pandas as pd
+import plotly.express as px
+from .models import (
+    Workout,
+    WorkoutSet,
+    RecoveryMetric,
+    BodyMeasurement
+)
 
 def home(request):
     return render(request, 'main/home.html') 
@@ -22,8 +29,6 @@ def create_workout(request):
     return render(request, 'main/create_workout.html', {
         'form': form
     })
-
-from .models import Workout, WorkoutSet, RecoveryMetric
 
 
 def workout_list(request):
@@ -49,4 +54,35 @@ def workout_detail(request, workout_id):
         'workout': workout,
         'workout_sets': workout_sets,
         'recovery': recovery,
+    })
+
+def body_stats(request):
+
+    measurements = BodyMeasurement.objects.all().order_by(
+        'measurement_date'
+    )
+
+    dates = []
+    weights = []
+
+    for item in measurements:
+        dates.append(item.measurement_date)
+        weights.append(item.weight)
+
+    df = pd.DataFrame({
+        'Дата': dates,
+        'Вес': weights
+    })
+
+    fig = px.line(
+        df,
+        x='Дата',
+        y='Вес',
+        title='Динамика веса'
+    )
+
+    chart = fig.to_html()
+
+    return render(request, 'main/body_stats.html', {
+        'chart': chart
     })
