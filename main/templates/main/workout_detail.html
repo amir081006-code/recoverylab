@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1 class="mb-4">
+    {{ workout.title }}
+</h1>
+
+<div class="mb-4">
+
+    <p>
+        <strong>Дата:</strong>
+        {{ workout.workout_date }}
+    </p>
+
+    <p>
+        <strong>Длительность:</strong>
+        {{ workout.duration }} мин
+    </p>
+
+    <p>
+        <strong>Усталость:</strong>
+        {{ workout.fatigue_level }}/10
+    </p>
+
+    <p>
+        <strong>Заметки:</strong>
+        {{ workout.notes }}
+    </p>
+
+</div>
+
+<h2 class="mb-3">
+    Упражнения
+</h2>
+
+<table class="table table-striped">
+
+    <thead>
+        <tr>
+            <th>Упражнение</th>
+            <th>Подходы</th>
+            <th>Повторы</th>
+            <th>Вес</th>
+            <th>RPE</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        {% for item in workout_sets %}
+
+        <tr>
+            <td>{{ item.exercise.name }}</td>
+            <td>{{ item.sets }}</td>
+            <td>{{ item.reps }}</td>
+            <td>{{ item.weight }} кг</td>
+            <td>{{ item.rpe }}</td>
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% if recovery %}
+
+<h2 class="mt-5 mb-3">
+    Восстановление
+</h2>
+
+<div class="card p-3">
+
+    <p>
+        <strong>Сон:</strong>
+        {{ recovery.sleep_hours }} ч
+    </p>
+
+    <p>
+        <strong>Стресс:</strong>
+        {{ recovery.stress_level }}
+    </p>
+
+    <p>
+        <strong>Энергия:</strong>
+        {{ recovery.energy_level }}
+    </p>
+
+    <p>
+        <strong>Самочувствие:</strong>
+        {{ recovery.mood }}
+    </p>
+
+    <p>
+        <strong>Recovery Score:</strong>
+        {{ recovery.recovery_score }}
+    </p>
+
+</div>
+
+{% endif %}
+
+{% endblock %}

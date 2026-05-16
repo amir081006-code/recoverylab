@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1 class="mb-4">Все тренировки</h1>
+
+<table class="table table-striped">
+
+    <thead>
+        <tr>
+            <th>Название</th>
+            <th>Дата</th>
+            <th>Длительность</th>
+            <th>Усталость</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        {% for workout in workouts %}
+
+        <tr>
+            <td>
+                <a href="{% url 'workout_detail' workout.id %}">
+                    {{ workout.title }}
+                </a>
+            </td>
+            <td>{{ workout.workout_date }}</td>
+            <td>{{ workout.duration }} мин</td>
+            <td>{{ workout.fatigue_level }}/10</td>
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}
