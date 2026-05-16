@@ -28,3 +28,38 @@ class Exercise(models.Model):
     class Meta:
         verbose_name = 'Упражнение'
         verbose_name_plural = 'Упражнения'
+
+
+class Workout(models.Model):
+    title = models.CharField(
+        max_length=100,
+        verbose_name='Название тренировки'
+    )
+
+    workout_date = models.DateField(
+        verbose_name='Дата тренировки'
+    )
+
+    duration = models.PositiveIntegerField(
+        verbose_name='Длительность (мин)'
+    )
+
+    fatigue_level = models.IntegerField(
+        verbose_name='Уровень усталости'
+    )
+
+    notes = models.TextField(
+        blank=True,
+        verbose_name='Заметки'
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = 'Тренировка'
+        verbose_name_plural = 'Тренировки'
