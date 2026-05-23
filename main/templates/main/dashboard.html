@@ -1,0 +1,412 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard · RecoveryLab{% endblock %}
+
+{% block extra_css %}
+<style>
+    .dashboard-hero {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 24px;
+        margin-bottom: 28px;
+    }
+
+    .dashboard-kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 14px;
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+    }
+
+    .dashboard-kicker::before {
+        content: "";
+        width: 28px;
+        height: 1px;
+        background: rgba(255, 255, 255, 0.35);
+    }
+
+    .dashboard-title {
+        margin-bottom: 10px;
+        font-size: clamp(2rem, 4vw, 3rem);
+        font-weight: 800;
+        letter-spacing: -0.06em;
+    }
+
+    .dashboard-subtitle {
+        max-width: 620px;
+        margin: 0;
+        color: var(--rl-muted);
+        font-size: 1rem;
+        line-height: 1.65;
+    }
+
+    .dashboard-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .dashboard-actions .btn {
+        border-radius: 999px;
+        padding: 12px 18px;
+        font-weight: 600;
+    }
+
+    .btn-soft {
+        color: #ffffff;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.04);
+    }
+
+    .btn-soft:hover,
+    .btn-soft:focus {
+        color: #ffffff;
+        border-color: rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.08);
+    }
+
+    .metric-card {
+        position: relative;
+        height: 100%;
+        padding: 22px;
+        overflow: hidden;
+    }
+
+    .metric-card::before {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        content: "";
+        transform: translate(42px, -58px);
+        opacity: 0.24;
+        filter: blur(2px);
+    }
+
+    .metric-card--violet::before {
+        background: radial-gradient(circle, rgba(124, 92, 255, 0.9), transparent 68%);
+    }
+
+    .metric-card--green::before {
+        background: radial-gradient(circle, rgba(25, 195, 125, 0.9), transparent 68%);
+    }
+
+    .metric-card--orange::before {
+        background: radial-gradient(circle, rgba(255, 138, 76, 0.9), transparent 68%);
+    }
+
+    .metric-card--blue::before {
+        background: radial-gradient(circle, rgba(76, 201, 240, 0.9), transparent 68%);
+    }
+
+    .metric-head {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+
+    .metric-label {
+        color: rgba(255, 255, 255, 0.58);
+        font-size: 0.76rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+    }
+
+    .metric-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 42px;
+        height: 42px;
+        border-radius: 16px;
+        color: #ffffff;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .metric-value {
+        position: relative;
+        z-index: 1;
+        margin-bottom: 8px;
+        font-size: clamp(1.7rem, 3vw, 2.35rem);
+        font-weight: 800;
+        letter-spacing: -0.05em;
+    }
+
+    .metric-note {
+        position: relative;
+        z-index: 1;
+        color: var(--rl-muted);
+        font-size: 0.92rem;
+    }
+
+    .analytics-panel {
+        padding: 24px;
+    }
+
+    .panel-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+
+    .panel-eyebrow {
+        margin-bottom: 8px;
+        color: rgba(255, 255, 255, 0.48);
+        font-size: 0.74rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+    }
+
+    .panel-title {
+        margin: 0;
+        font-size: 1.35rem;
+        font-weight: 700;
+        letter-spacing: -0.03em;
+    }
+
+    .panel-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 14px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 999px;
+        color: rgba(255, 255, 255, 0.76);
+        background: rgba(255, 255, 255, 0.04);
+        font-size: 0.86rem;
+        white-space: nowrap;
+    }
+
+    .chart-shell {
+        min-height: 420px;
+        padding: 12px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.02);
+    }
+
+    .chart-shell > div {
+        width: 100%;
+    }
+
+    @media (max-width: 767.98px) {
+        .dashboard-hero,
+        .panel-header {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .dashboard-actions {
+            width: 100%;
+        }
+
+        .dashboard-actions .btn {
+            flex: 1 1 100%;
+        }
+
+        .analytics-panel {
+            padding: 18px;
+        }
+
+        .chart-shell {
+            min-height: 320px;
+            padding: 8px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<section class="dashboard-hero">
+    <div>
+        <span class="dashboard-kicker">
+            Fitness analytics
+        </span>
+
+        <h1 class="dashboard-title">
+            Fitness Dashboard
+        </h1>
+
+        <p class="dashboard-subtitle">
+            Единый обзор тренировочной нагрузки, динамики тела и восстановления для более точных решений по прогрессу.
+        </p>
+    </div>
+
+    <div class="dashboard-actions">
+        <a class="btn btn-primary" href="{% url 'create_workout' %}">
+            <i class="bi bi-plus-lg me-2"></i>
+            Новая тренировка
+        </a>
+
+        <a class="btn btn-soft" href="{% url 'workout_list' %}">
+            <i class="bi bi-arrow-up-right me-2"></i>
+            Все тренировки
+        </a>
+    </div>
+</section>
+
+<div class="row g-4">
+    <div class="col-12 col-sm-6 col-xl-3">
+        <article class="card metric-card metric-card--violet">
+            <div class="metric-head">
+                <span class="metric-label">
+                    Тренировки
+                </span>
+
+                <span class="metric-icon">
+                    <i class="bi bi-lightning-charge"></i>
+                </span>
+            </div>
+
+            <div class="metric-value">
+                {{ workouts_count }}
+            </div>
+
+            <div class="metric-note">
+                Всего записей
+            </div>
+        </article>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+        <article class="card metric-card metric-card--green">
+            <div class="metric-head">
+                <span class="metric-label">
+                    Последний вес
+                </span>
+
+                <span class="metric-icon">
+                    <i class="bi bi-activity"></i>
+                </span>
+            </div>
+
+            <div class="metric-value">
+                {{ latest_weight.weight }} кг
+            </div>
+
+            <div class="metric-note">
+                Актуальное измерение
+            </div>
+        </article>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+        <article class="card metric-card metric-card--orange">
+            <div class="metric-head">
+                <span class="metric-label">
+                    Средняя усталость
+                </span>
+
+                <span class="metric-icon">
+                    <i class="bi bi-graph-up-arrow"></i>
+                </span>
+            </div>
+
+            <div class="metric-value">
+                {{ average_fatigue.fatigue_level__avg|floatformat:1 }}
+            </div>
+
+            <div class="metric-note">
+                По тренировкам
+            </div>
+        </article>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+        <article class="card metric-card metric-card--blue">
+            <div class="metric-head">
+                <span class="metric-label">
+                    Recovery Score
+                </span>
+
+                <span class="metric-icon">
+                    <i class="bi bi-heart-pulse"></i>
+                </span>
+            </div>
+
+            <div class="metric-value">
+                {{ latest_recovery.recovery_score }}
+            </div>
+
+            <div class="metric-note">
+                Готовность к нагрузке
+            </div>
+        </article>
+    </div>
+</div>
+
+<div class="col-md-3 mb-4">
+    <div class="card p-3 shadow-sm">
+
+        <h5>
+            Training Volume
+        </h5>
+
+        <h2>
+            {{ total_volume }} кг
+        </h2>
+
+    </div>
+</div>
+
+<section class="card analytics-panel mt-4 mt-lg-5">
+    <div class="panel-header">
+        <div>
+            <div class="panel-eyebrow">
+                Body metrics
+            </div>
+
+            <h2 class="panel-title">
+                Динамика веса
+            </h2>
+        </div>
+
+        <div class="panel-chip">
+            <i class="bi bi-bar-chart"></i>
+            <span>Plotly analytics</span>
+        </div>
+    </div>
+
+    <div class="chart-shell">
+        {{ chart|safe }}
+    </div>
+</section>
+
+<div class="card p-4 shadow-sm mt-4">
+
+    <h3 class="mb-3">
+        Рекомендации RecoveryLab
+    </h3>
+
+    {% for recommendation in recommendations %}
+
+        <div class="alert alert-warning">
+
+            {{ recommendation }}
+
+        </div>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}

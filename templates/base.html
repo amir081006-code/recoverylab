@@ -3,42 +3,487 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RecoveryLab</title>
+    <title>{% block title %}RecoveryLab{% endblock %}</title>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --rl-bg: #06080d;
+            --rl-bg-soft: #0b0f18;
+            --rl-surface: rgba(16, 21, 33, 0.82);
+            --rl-surface-strong: #101521;
+            --rl-surface-muted: #151c2b;
+            --rl-border: rgba(255, 255, 255, 0.08);
+            --rl-text: #f7f9fc;
+            --rl-muted: #98a2b3;
+            --rl-accent: #7c5cff;
+            --rl-accent-2: #19c37d;
+            --rl-accent-3: #ff8a4c;
+            --rl-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            color: var(--rl-text);
+            background:
+                radial-gradient(circle at top left, rgba(124, 92, 255, 0.16), transparent 32rem),
+                radial-gradient(circle at 85% 10%, rgba(25, 195, 125, 0.12), transparent 26rem),
+                linear-gradient(180deg, #070910 0%, #05070c 100%);
+            font-family: "Inter", "Segoe UI", Arial, sans-serif;
+            letter-spacing: -0.01em;
+        }
+
+        a {
+            color: inherit;
+        }
+
+        .app-shell {
+            min-height: 100vh;
+        }
+
+        .app-sidebar {
+            position: fixed;
+            inset: 0 auto 0 0;
+            z-index: 1030;
+            width: 280px;
+            padding: 24px 18px;
+            border-right: 1px solid var(--rl-border);
+            background: rgba(8, 11, 18, 0.84);
+            backdrop-filter: blur(18px);
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 6px 8px 24px;
+            text-decoration: none;
+        }
+
+        .brand-mark {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 16px;
+            color: #ffffff;
+            background: linear-gradient(135deg, var(--rl-accent), #4cc9f0);
+            box-shadow: 0 18px 32px rgba(124, 92, 255, 0.28);
+        }
+
+        .brand-copy strong,
+        .brand-copy span {
+            display: block;
+        }
+
+        .brand-copy strong {
+            font-size: 1.05rem;
+            font-weight: 700;
+        }
+
+        .brand-copy span {
+            margin-top: 2px;
+            color: var(--rl-muted);
+            font-size: 0.78rem;
+        }
+
+        .sidebar-section-label {
+            margin: 10px 10px 12px;
+            color: rgba(255, 255, 255, 0.38);
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .sidebar-nav {
+            gap: 6px;
+        }
+
+        .sidebar-nav .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            border: 1px solid transparent;
+            border-radius: 16px;
+            color: rgba(255, 255, 255, 0.78);
+            font-weight: 500;
+            transition: 180ms ease;
+        }
+
+        .sidebar-nav .nav-link i {
+            width: 20px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1rem;
+        }
+
+        .sidebar-nav .nav-link:hover,
+        .sidebar-nav .nav-link:focus {
+            color: #ffffff;
+            border-color: rgba(255, 255, 255, 0.09);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .sidebar-nav .nav-link.active {
+            color: #ffffff;
+            border-color: rgba(124, 92, 255, 0.22);
+            background: linear-gradient(135deg, rgba(124, 92, 255, 0.18), rgba(76, 201, 240, 0.08));
+        }
+
+        .sidebar-nav .nav-link.active i {
+            color: #ffffff;
+        }
+
+        .sidebar-highlight {
+            margin-top: auto;
+            padding: 18px;
+            border: 1px solid rgba(124, 92, 255, 0.22);
+            border-radius: 22px;
+            background:
+                linear-gradient(145deg, rgba(124, 92, 255, 0.16), rgba(25, 195, 125, 0.08)),
+                rgba(255, 255, 255, 0.02);
+        }
+
+        .sidebar-highlight span {
+            display: block;
+            margin-bottom: 8px;
+            color: rgba(255, 255, 255, 0.48);
+            font-size: 0.74rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .sidebar-highlight strong {
+            display: block;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .sidebar-highlight p {
+            margin: 8px 0 0;
+            color: var(--rl-muted);
+            font-size: 0.88rem;
+            line-height: 1.5;
+        }
+
+        .app-main {
+            min-height: 100vh;
+        }
+
+        .mobile-header {
+            position: sticky;
+            top: 0;
+            z-index: 1020;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            min-height: 74px;
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--rl-border);
+            background: rgba(8, 11, 18, 0.84);
+            backdrop-filter: blur(18px);
+        }
+
+        .mobile-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        .mobile-menu-button {
+            border-color: rgba(255, 255, 255, 0.12);
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .mobile-menu-button:hover,
+        .mobile-menu-button:focus {
+            border-color: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .app-offcanvas {
+            color: var(--rl-text);
+            border-right: 1px solid var(--rl-border);
+            background: #090d16;
+        }
+
+        .app-offcanvas .offcanvas-header {
+            border-bottom: 1px solid var(--rl-border);
+        }
+
+        .app-content {
+            min-height: 100vh;
+        }
+
+        .content-wrap {
+            max-width: 1440px;
+        }
+
+        .card,
+        .glass-panel {
+            color: var(--rl-text);
+            border: 1px solid var(--rl-border);
+            border-radius: 24px;
+            background: var(--rl-surface);
+            box-shadow: var(--rl-shadow);
+            backdrop-filter: blur(16px);
+        }
+
+        .table {
+            --bs-table-color: var(--rl-text);
+            --bs-table-bg: transparent;
+            --bs-table-border-color: rgba(255, 255, 255, 0.08);
+            --bs-table-striped-color: var(--rl-text);
+            --bs-table-striped-bg: rgba(255, 255, 255, 0.025);
+            margin-bottom: 0;
+        }
+
+        .table thead th {
+            color: rgba(255, 255, 255, 0.56);
+            border-bottom-color: rgba(255, 255, 255, 0.1);
+            font-size: 0.76rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .table tbody td {
+            vertical-align: middle;
+        }
+
+        .table a {
+            color: #d8d1ff;
+            text-decoration: none;
+        }
+
+        .table a:hover {
+            color: #ffffff;
+        }
+
+        .form-control,
+        .form-select,
+        textarea,
+        input {
+            color: var(--rl-text);
+            border-color: rgba(255, 255, 255, 0.1);
+            background-color: rgba(255, 255, 255, 0.04);
+        }
+
+        .form-control:focus,
+        .form-select:focus,
+        textarea:focus,
+        input:focus {
+            color: var(--rl-text);
+            border-color: rgba(124, 92, 255, 0.55);
+            background-color: rgba(255, 255, 255, 0.06);
+            box-shadow: 0 0 0 0.25rem rgba(124, 92, 255, 0.16);
+        }
+
+        .btn-primary {
+            border: none;
+            background: linear-gradient(135deg, var(--rl-accent), #5b8cff);
+            box-shadow: 0 14px 28px rgba(124, 92, 255, 0.26);
+        }
+
+        .btn-primary:hover,
+        .btn-primary:focus {
+            background: linear-gradient(135deg, #8c70ff, #6c98ff);
+        }
+
+        @media (min-width: 992px) {
+            .app-main {
+                margin-left: 280px;
+            }
+        }
+
+        @media (max-width: 991.98px) {
+            .content-wrap {
+                max-width: none;
+            }
+        }
+    </style>
+
+    {% block extra_css %}
+    {% endblock %}
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-
-            <a class="navbar-brand" href="/">
-                RecoveryLab
+    <div class="app-shell">
+        <aside class="app-sidebar d-none d-lg-flex flex-column">
+            <a class="sidebar-brand" href="{% url 'home' %}">
+                <span class="brand-mark">
+                    <i class="bi bi-activity"></i>
+                </span>
+                <span class="brand-copy">
+                    <strong>RecoveryLab</strong>
+                    <span>Fitness analytics</span>
+                </span>
             </a>
 
-            <div class="navbar-nav">
-
-                <a class="nav-link" href="/">
-                    Главная
-                </a>
-
-                <a class="nav-link" href="/workouts/">
-                    Все тренировки
-                </a>
-
-                <a class="nav-link" href="/create-workout/">
-                    Создать тренировку
-                </a>
-
+            <div class="sidebar-section-label">
+                Навигация
             </div>
 
-        </div>
-    </nav>
+            <nav class="nav flex-column sidebar-nav">
+                <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{% url 'home' %}">
+                    <i class="bi bi-house-door"></i>
+                    <span>Главная</span>
+                </a>
 
-    <div class="container mt-4">
-        {% block content %}
-        {% endblock %}
+                <a class="nav-link {% if request.path == '/dashboard/' %}active{% endif %}" href="{% url 'dashboard' %}">
+                    <i class="bi bi-grid-1x2"></i>
+                    <span>Dashboard</span>
+                </a>
+
+                <a class="nav-link {% if request.path == '/workouts/' or '/workout/' in request.path %}active{% endif %}" href="{% url 'workout_list' %}">
+                    <i class="bi bi-bar-chart-line"></i>
+                    <span>Все тренировки</span>
+                </a>
+
+                <a class="nav-link {% if request.path == '/create-workout/' %}active{% endif %}" href="{% url 'create_workout' %}">
+                    <i class="bi bi-plus-circle"></i>
+                    <span>Создать тренировку</span>
+                </a>
+
+                <li class="nav-item">
+                    <a
+                        class="nav-link"
+                        href="{% url 'add_body_measurement' %}"
+                    >
+                        Добавить измерение
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a
+                        class="nav-link"
+                        href="{% url 'add_workout_set' %}"
+                    >
+                        Добавить упражнение
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a
+                        class="nav-link"
+                        href="{% url 'add_recovery' %}"
+                    >
+                        Добавить recovery
+                    </a>
+                </li>
+
+                <a class="nav-link {% if request.path == '/body-stats/' %}active{% endif %}" href="{% url 'body_stats' %}">
+                    <i class="bi bi-heart-pulse"></i>
+                    <span>Аналитика веса</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-highlight">
+                <span>Recovery system</span>
+                <strong>Train smart. Recover better.</strong>
+                <p>
+                    Отслеживайте нагрузку, динамику тела и готовность к следующей тренировке в одном месте.
+                </p>
+            </div>
+        </aside>
+
+        <div class="offcanvas offcanvas-start app-offcanvas d-lg-none" tabindex="-1" id="mobileSidebar" aria-labelledby="mobileSidebarLabel">
+            <div class="offcanvas-header">
+                <div class="mobile-brand" id="mobileSidebarLabel">
+                    <span class="brand-mark">
+                        <i class="bi bi-activity"></i>
+                    </span>
+                    <span>RecoveryLab</span>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Закрыть"></button>
+            </div>
+
+            <div class="offcanvas-body d-flex flex-column">
+                <div class="sidebar-section-label mt-0">
+                    Навигация
+                </div>
+
+                <nav class="nav flex-column sidebar-nav">
+                    <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{% url 'home' %}">
+                        <i class="bi bi-house-door"></i>
+                        <span>Главная</span>
+                    </a>
+
+                    <a class="nav-link {% if request.path == '/dashboard/' %}active{% endif %}" href="{% url 'dashboard' %}">
+                        <i class="bi bi-grid-1x2"></i>
+                        <span>Dashboard</span>
+                    </a>
+
+                    <a class="nav-link {% if request.path == '/workouts/' or '/workout/' in request.path %}active{% endif %}" href="{% url 'workout_list' %}">
+                        <i class="bi bi-bar-chart-line"></i>
+                        <span>Все тренировки</span>
+                    </a>
+
+                    <a class="nav-link {% if request.path == '/create-workout/' %}active{% endif %}" href="{% url 'create_workout' %}">
+                        <i class="bi bi-plus-circle"></i>
+                        <span>Создать тренировку</span>
+                    </a>
+
+                    <a class="nav-link {% if request.path == '/body-stats/' %}active{% endif %}" href="{% url 'body_stats' %}">
+                        <i class="bi bi-heart-pulse"></i>
+                        <span>Аналитика веса</span>
+                    </a>
+                </nav>
+
+                <div class="sidebar-highlight">
+                    <span>Recovery system</span>
+                    <strong>Train smart. Recover better.</strong>
+                    <p>
+                        Отслеживайте нагрузку, динамику тела и готовность к следующей тренировке в одном месте.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <section class="app-main">
+            <header class="mobile-header d-lg-none">
+                <div class="mobile-brand">
+                    <span class="brand-mark">
+                        <i class="bi bi-activity"></i>
+                    </span>
+                    <span>RecoveryLab</span>
+                </div>
+
+                <button class="btn mobile-menu-button" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar" aria-controls="mobileSidebar">
+                    <i class="bi bi-list fs-5"></i>
+                </button>
+            </header>
+
+            <main class="app-content">
+                <div class="container-fluid content-wrap px-3 px-md-4 px-xl-5 py-4 py-lg-5">
+                    {% block content %}
+                    {% endblock %}
+                </div>
+            </main>
+        </section>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+
+    {% block extra_js %}
+    {% endblock %}
 </body>
 </html>
