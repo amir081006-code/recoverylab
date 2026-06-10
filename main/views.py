@@ -9,6 +9,106 @@ from .models import (
     BodyMeasurement
 )
 
+
+PLOTLY_CONFIG = {
+    'displayModeBar': False,
+    'responsive': True,
+}
+
+
+def chart_html(fig):
+    fig.update_layout(
+        template='plotly_dark',
+        paper_bgcolor='rgba(0, 0, 0, 0)',
+        plot_bgcolor='rgba(255, 255, 255, 0.02)',
+        font={
+            'family': 'Inter, Segoe UI, Arial, sans-serif',
+            'color': '#f7f9fc',
+        },
+        title={
+            'font': {'size': 18, 'color': '#f7f9fc'},
+            'x': 0.02,
+            'xanchor': 'left',
+        },
+        margin={'l': 28, 'r': 18, 't': 58, 'b': 28},
+        height=360,
+        hovermode='x unified',
+        legend={
+            'orientation': 'h',
+            'yanchor': 'bottom',
+            'y': 1.02,
+            'xanchor': 'right',
+            'x': 1,
+        },
+    )
+    fig.update_xaxes(
+        showgrid=False,
+        zeroline=False,
+        linecolor='rgba(255, 255, 255, 0.12)',
+    )
+    fig.update_yaxes(
+        gridcolor='rgba(255, 255, 255, 0.08)',
+        zeroline=False,
+        linecolor='rgba(255, 255, 255, 0.12)',
+    )
+    fig.update_traces(
+        line={'color': '#28d17c', 'width': 3},
+        marker={'size': 7, 'color': '#4cc9f0'},
+    )
+
+    return fig.to_html(
+        full_html=False,
+        config=PLOTLY_CONFIG,
+        default_width='100%',
+        default_height='360px',
+    )
+
+
+def recommendation_cards(recommendations):
+    cards = []
+
+    for text in recommendations:
+        lowered = text.lower()
+
+        severity = 'success'
+        icon = 'bi-check-circle'
+        title = 'Стабильная зона'
+
+        if any(word in lowered for word in [
+            'низкий',
+            'недостаток',
+            'переутомления',
+            'снижается',
+        ]):
+            severity = 'danger'
+            icon = 'bi-exclamation-triangle'
+            title = 'Высокий приоритет'
+        elif any(word in lowered for word in [
+            'высокий',
+            'увеличилась',
+            'нагрузка',
+        ]):
+            severity = 'warning'
+            icon = 'bi-lightning-charge'
+            title = 'Требует внимания'
+        elif any(word in lowered for word in [
+            'прогресс',
+            'нормальном',
+            'устойчивым',
+        ]):
+            severity = 'success'
+            icon = 'bi-check-circle'
+            title = 'Хорошая динамика'
+
+        cards.append({
+            'text': text,
+            'severity': severity,
+            'icon': icon,
+            'title': title,
+        })
+
+    return cards
+
 def home(request):
     return render(request, 'main/home.html') 
 
@@ -158,7 +258,7 @@ def body_stats(request):
         title='Динамика веса'
     )
 
-    chart = fig.to_html()
+    chart = chart_html(fig)
 
     return render(request, 'main/body_stats.html', {
         'chart': chart
@@ -199,7 +299,7 @@ def dashboard(request):
         title='Динамика веса'
     )
 
-    chart = fig.to_html()
+    chart = chart_html(fig)
 
     workout_sets = WorkoutSet.objects.all()
 
@@ -342,6 +442,7 @@ def dashboard(request):
         'chart': chart,
         'total_volume': total_volume,
         'recommendations': recommendations,
+        'recommendation_cards': recommendation_cards(recommendations),
     }
 
     return render(

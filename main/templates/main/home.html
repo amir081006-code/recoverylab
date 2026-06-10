@@ -1,11 +1,203 @@
 {% extends 'base.html' %}
 
+{% block title %}RecoveryLab · Intelligent recovery{% endblock %}
+
+{% block extra_css %}
+<style>
+    .home-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+        gap: 18px;
+        align-items: stretch;
+    }
+
+    .home-hero {
+        min-height: 420px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 26px;
+        overflow: hidden;
+        background:
+            linear-gradient(135deg, rgba(124, 92, 255, 0.2), rgba(40, 209, 124, 0.08)),
+            var(--rl-panel);
+    }
+
+    .home-hero__mark {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        width: fit-content;
+        padding: 10px 12px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: var(--rl-radius);
+        color: rgba(255, 255, 255, 0.78);
+        background: rgba(255, 255, 255, 0.05);
+        font-weight: 700;
+    }
+
+    .home-hero h1 {
+        max-width: 700px;
+        margin: 34px 0 14px;
+        font-size: 3rem;
+        font-weight: 800;
+        line-height: 1.05;
+    }
+
+    .home-hero p {
+        max-width: 650px;
+        margin: 0;
+        color: var(--rl-muted);
+        font-size: 1.04rem;
+        line-height: 1.7;
+    }
+
+    .home-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 28px;
+    }
+
+    .home-stack {
+        display: grid;
+        gap: 18px;
+    }
+
+    .home-card-link {
+        display: grid;
+        grid-template-columns: 46px minmax(0, 1fr) 28px;
+        gap: 14px;
+        align-items: center;
+        min-height: 112px;
+        padding: 18px;
+        border: 1px solid var(--rl-border);
+        border-radius: var(--rl-radius);
+        color: #ffffff;
+        text-decoration: none;
+        background: rgba(255, 255, 255, 0.04);
+        transition: border-color 160ms ease, background 160ms ease;
+    }
+
+    .home-card-link:hover,
+    .home-card-link:focus {
+        border-color: rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.075);
+    }
+
+    .home-card-link__icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 46px;
+        height: 46px;
+        border-radius: var(--rl-radius);
+        background: rgba(255, 255, 255, 0.07);
+    }
+
+    .home-card-link h2 {
+        margin: 0 0 6px;
+        font-size: 1.06rem;
+        font-weight: 800;
+    }
+
+    .home-card-link p {
+        margin: 0;
+        color: var(--rl-muted);
+        line-height: 1.5;
+    }
+
+    .home-card-link__arrow {
+        color: rgba(255, 255, 255, 0.58);
+    }
+
+    @media (max-width: 991.98px) {
+        .home-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 767.98px) {
+        .home-hero {
+            min-height: auto;
+            padding: 20px;
+        }
+
+        .home-hero h1 {
+            font-size: 2.1rem;
+        }
+
+        .home-actions .btn {
+            flex: 1 1 100%;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 
-<h1 class="mb-3">RecoveryLab</h1>
+<section class="home-grid">
+    <div class="card home-hero">
+        <div>
+            <span class="home-hero__mark">
+                <i class="bi bi-activity"></i>
+                Intelligent sports recovery assistant
+            </span>
 
-<p>
-    Система анализа тренировочной нагрузки и восстановления спортсмена.
-</p>
+            <h1>RecoveryLab</h1>
+
+            <p>
+                Рабочее пространство для спортсмена: тренировочная нагрузка, fatigue, recovery, сон, стресс и body metrics в одном месте.
+            </p>
+
+            <div class="home-actions">
+                <a class="btn btn-primary" href="{% url 'dashboard' %}">
+                    <i class="bi bi-speedometer2 me-2"></i>
+                    Открыть dashboard
+                </a>
+
+                <a class="btn btn-soft" href="{% url 'create_workout' %}">
+                    <i class="bi bi-plus-lg me-2"></i>
+                    Новая тренировка
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="home-stack">
+        <a class="home-card-link" href="{% url 'workout_list' %}">
+            <span class="home-card-link__icon">
+                <i class="bi bi-bar-chart-line"></i>
+            </span>
+            <div>
+                <h2>Тренировки</h2>
+                <p>История нагрузок, длительность, fatigue и детали упражнений.</p>
+            </div>
+            <i class="bi bi-arrow-up-right home-card-link__arrow"></i>
+        </a>
+
+        <a class="home-card-link" href="{% url 'add_recovery' %}">
+            <span class="home-card-link__icon">
+                <i class="bi bi-heart-pulse"></i>
+            </span>
+            <div>
+                <h2>Recovery</h2>
+                <p>Сон, стресс, энергия, самочувствие и recovery score.</p>
+            </div>
+            <i class="bi bi-arrow-up-right home-card-link__arrow"></i>
+        </a>
+
+        <a class="home-card-link" href="{% url 'body_stats' %}">
+            <span class="home-card-link__icon">
+                <i class="bi bi-rulers"></i>
+            </span>
+            <div>
+                <h2>Body metrics</h2>
+                <p>Измерения тела и график динамики веса.</p>
+            </div>
+            <i class="bi bi-arrow-up-right home-card-link__arrow"></i>
+        </a>
+    </div>
+</section>
 
 {% endblock %}

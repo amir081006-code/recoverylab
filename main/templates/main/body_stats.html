@@ -1,15 +1,51 @@
 {% extends 'base.html' %}
 
+{% block title %}Аналитика веса · RecoveryLab{% endblock %}
+
 {% block content %}
 
-<h1 class="mb-4">
-    Аналитика веса
-</h1>
+<section class="page-head">
+    <div>
+        <span class="page-kicker">
+            <i class="bi bi-graph-up"></i>
+            Body analytics
+        </span>
+        <h1 class="page-title">Аналитика веса</h1>
+        <p class="page-subtitle">График динамики body metrics помогает видеть тренд восстановления и прогресса.</p>
+    </div>
 
-<div>
+    <div class="action-row">
+        <a class="btn btn-primary" href="{% url 'add_body_measurement' %}">
+            <i class="bi bi-plus-lg me-2"></i>
+            Добавить измерение
+        </a>
+        <a class="btn btn-soft" href="{% url 'dashboard' %}">
+            <i class="bi bi-speedometer2 me-2"></i>
+            Dashboard
+        </a>
+    </div>
+</section>
 
-    {{ chart|safe }}
+<section class="panel-card">
+    <div class="panel-header">
+        <div>
+            <div class="panel-eyebrow">
+                <i class="bi bi-activity"></i>
+                Trend
+            </div>
+            <h2 class="panel-title">Динамика веса</h2>
+            <p class="panel-subtitle">Отслеживайте изменения веса рядом с тренировочной нагрузкой и recovery данными.</p>
+        </div>
 
-</div>
+        <span class="panel-chip">
+            <i class="bi bi-rulers"></i>
+            Body metrics
+        </span>
+    </div>
+
+    <div class="chart-shell">
+        {{ chart|safe }}
+    </div>
+</section>
 
 {% endblock %}

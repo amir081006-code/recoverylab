@@ -1,32 +1,43 @@
 {% extends 'base.html' %}
 
+{% block title %}Добавить упражнение · RecoveryLab{% endblock %}
+
 {% block content %}
 
-<div class="container mt-5">
+<section class="form-card">
+    <div class="form-card__header">
+        <div>
+            <span class="page-kicker">
+                <i class="bi bi-list-check"></i>
+                Exercise set
+            </span>
+            <h1>Добавить упражнение</h1>
+            <p>Запишите подходы, повторения, рабочий вес и субъективную интенсивность.</p>
+        </div>
 
-    <div class="card p-4 shadow-sm">
-
-        <h2 class="mb-4">
-            Добавить упражнение
-        </h2>
-
-        <form method="POST">
-
-            {% csrf_token %}
-
-            {{ form.as_p }}
-
-            <button
-                type="submit"
-                class="btn btn-primary"
-            >
-                Сохранить
-            </button>
-
-        </form>
-
+        <a class="btn btn-soft btn-icon" href="{% url 'dashboard' %}" aria-label="Вернуться">
+            <i class="bi bi-arrow-left"></i>
+        </a>
     </div>
 
-</div>
+    <div class="form-card__body">
+        <form method="post">
+            {% csrf_token %}
+
+            {% include 'main/includes/form_fields.html' %}
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-check2-circle me-2"></i>
+                    Сохранить упражнение
+                </button>
+
+                <a class="btn btn-soft" href="{% url 'workout_list' %}">
+                    Все тренировки
+                </a>
+            </div>
+        </form>
+    </div>
+</section>
 
 {% endblock %}

@@ -1,19 +1,43 @@
 {% extends 'base.html' %}
 
+{% block title %}Новая тренировка · RecoveryLab{% endblock %}
+
 {% block content %}
 
-<h1 class="mb-4">Создать тренировку</h1>
+<section class="form-card">
+    <div class="form-card__header">
+        <div>
+            <span class="page-kicker">
+                <i class="bi bi-plus-circle"></i>
+                Workout
+            </span>
+            <h1>Новая тренировка</h1>
+            <p>Зафиксируйте нагрузку, длительность и уровень усталости после сессии.</p>
+        </div>
 
-<form method="post">
+        <a class="btn btn-soft btn-icon" href="{% url 'workout_list' %}" aria-label="Все тренировки">
+            <i class="bi bi-arrow-left"></i>
+        </a>
+    </div>
 
-    {% csrf_token %}
+    <div class="form-card__body">
+        <form method="post">
+            {% csrf_token %}
 
-    {{ form.as_p }}
+            {% include 'main/includes/form_fields.html' %}
 
-    <button type="submit" class="btn btn-primary">
-        Сохранить тренировку
-    </button>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-check2-circle me-2"></i>
+                    Сохранить тренировку
+                </button>
 
-</form>
+                <a class="btn btn-soft" href="{% url 'dashboard' %}">
+                    Dashboard
+                </a>
+            </div>
+        </form>
+    </div>
+</section>
 
 {% endblock %}
